@@ -694,6 +694,7 @@ class LegacySidebar extends React.PureComponent {
                         className='btn btn-link'
                         onClick={this.openQuickSwitcher}
                     >
+                    LOCAL
                         <FormattedMessage
                             id={'channel_switch_modal.title'}
                             defaultMessage='Switch Channels'

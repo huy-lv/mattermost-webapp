@@ -523,9 +523,9 @@ class LoginController extends React.Component {
         const googleSigninEnabled = this.props.enableSignUpWithGoogle;
         const office365SigninEnabled = this.props.enableSignUpWithOffice365;
         const samlSigninEnabled = this.state.samlEnabled;
-        const usernameSigninEnabled = this.state.usernameSigninEnabled;
+        const usernameSigninEnabled = true;//this.state.usernameSigninEnabled;
         const emailSigninEnabled = this.state.emailSigninEnabled;
-        const googleSignInEnabled = true;
+        const googleSignInEnabled = false;
 
         if (emailSigninEnabled || usernameSigninEnabled || ldapEnabled) {
             let errorClass = '';
@@ -764,6 +764,7 @@ class LoginController extends React.Component {
                         <div className="signup__markdown">{customContent}</div>
                         <img alt={'signup team logo'} className="signup-team-logo" src={logoImage} />
                         <div className="signup__content">
+                            Web app from local
                             <SiteNameAndDescription customDescriptionText={customDescriptionText} siteName={siteName} />
                             {content}
                         </div>

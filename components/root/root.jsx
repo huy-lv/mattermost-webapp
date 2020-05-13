@@ -99,7 +99,7 @@ export default class Root extends React.Component {
 
         // Redux
         setUrl(getSiteURL());
-
+        console.log('XXXXXXXXXXXXXXXXXXXX', getSiteURL());
         setSystemEmojis(EmojiIndicesByAlias);
 
         // Force logout of all tabs if one tab is logged out

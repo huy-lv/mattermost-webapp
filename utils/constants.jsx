@@ -766,7 +766,16 @@ export const Constants = {
     Locations,
     PostListRowListIds,
     MAX_POST_VISIBILITY: 1000000,
-
+    USER_ROLE: {
+        TEACHER: 'teacher',
+        STUDENT: 'student',
+      },
+      DF: 'DD/MM/YYYY HH:mm:ss',
+      SERVER_STATUS: {
+        RUNNING: 'running',
+        STOPPED: 'stopped',
+        STARTING: 'starting',
+      },
     IGNORE_POST_TYPES: [PostTypes.JOIN_LEAVE, PostTypes.JOIN_TEAM, PostTypes.LEAVE_TEAM, PostTypes.JOIN_CHANNEL, PostTypes.LEAVE_CHANNEL, PostTypes.REMOVE_FROM_CHANNEL, PostTypes.ADD_REMOVE],
 
     PayloadSources: keyMirror({

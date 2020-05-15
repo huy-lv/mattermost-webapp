@@ -4,7 +4,7 @@ import Constants from 'utils/constants';
 import * as types from './action-types';
 
 export const joinRoom = (onCreateRoomDone) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     let uid = 'ix5kguhyziggtqne99ux96zo3a';
     let roomPath = '/onFlight/getRoomID/' + uid;
     let roomId = moment().valueOf();
@@ -34,7 +34,7 @@ export const joinRoom = (onCreateRoomDone) => {
       }
     });
   }
-} 
+}
 
 
 async function onJoinRoomSuccess(
@@ -75,3 +75,14 @@ async function onJoinRoomSuccess(
     .ref(`presence/${uid}/inRoom`)
     .set(roomId);
 }
+
+export function saveJanusId(roomId, id) {
+    return (dispatch, getState) => {
+      //get current user id
+    let uid = 'ix5kguhyziggtqne99ux96zo3a';
+      firebase
+        .database()
+        .ref(`/onFlight/rooms/${roomId}/users/${uid}/janusId`)
+        .set(id);
+    };
+  }

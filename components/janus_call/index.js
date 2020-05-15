@@ -6,20 +6,23 @@ import {bindActionCreators} from 'redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
-import JanusCall from './janus_call';
 import {
-  joinRoom,
+    joinRoom,
+    saveJanusId,
 } from '../../reducers/views/janus_call/actions';
+
+import JanusCall from './janus_call';
 
 function mapStateToProps(state) {
     return {
-        state: state
+        state
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         joinRoom: (onCreateRoomDone) => dispatch(joinRoom(onCreateRoomDone)),
+        saveJanusId: (roomId, id) => dispatch(saveJanusId(roomId, id)),
     };
 }
 

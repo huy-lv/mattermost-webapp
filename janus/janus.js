@@ -21,6 +21,7 @@
 	ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 	OTHER DEALINGS IN THE SOFTWARE.
  */
+/*global adapter, jQuery*/
 // List of sessions
 Janus.sessions = {};
 
@@ -319,7 +320,7 @@ Janus.init = function(options) {
 				to.srcObject = from.srcObject;
 			}
 		};
-		
+
 		// If this is a Safari Technology Preview, check if VP8 is supported
 		Janus.safariVp8 = false;
 		if(Janus.webRTCAdapter.browserDetails.browser === 'safari' &&
@@ -368,6 +369,7 @@ Janus.isWebrtcSupported = function() {
 };
 // Helper method to check whether devices can be accessed by this browser (e.g., not possible via plain HTTP)
 Janus.isGetUserMediaAvailable = function() {
+    debugger
 	return navigator.mediaDevices !== undefined && navigator.mediaDevices !== null &&
 		navigator.mediaDevices.getUserMedia !== undefined && navigator.mediaDevices.getUserMedia !== null;
 };

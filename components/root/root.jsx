@@ -47,11 +47,10 @@ const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
 const LazyJanusCall = React.lazy(() => import('components/janus_call'));
 
 import store from 'stores/redux_store.jsx';
-import { getSiteURL } from 'utils/url';
+import { getSiteURL, getServerURL } from 'utils/url';
 import { enableDevModeFeatures, isDevMode } from 'utils/utils';
 
 import A11yController from 'utils/a11y_controller';
-import { Client4 } from 'mattermost-redux/client';
 
 const CreateTeam = makeAsyncComponent(LazyCreateTeam);
 const ErrorPage = makeAsyncComponent(LazyErrorPage);
@@ -101,8 +100,9 @@ export default class Root extends React.Component {
         this.currentSidebarFocus = 0;
 
         // Redux
-        setUrl(getSiteURL());
-        console.log('XXXXXXXXXXXXXXXXXXXX', getSiteURL());
+        // setUrl(getSiteURL());
+        setUrl(getServerURL());
+
         setSystemEmojis(EmojiIndicesByAlias);
 
         // Force logout of all tabs if one tab is logged out
@@ -297,6 +297,7 @@ export default class Root extends React.Component {
                 const e = document.createElement('script');
                 e.type = 'text/javascript';
                 e.async = true;
+
                 // e.src =
                 //     (document.location.protocol === 'https:' ? 'https://' : 'http://') +
                 //     'cdn.rudderla bs.com/rudder-analytics.min.js';

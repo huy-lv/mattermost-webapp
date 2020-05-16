@@ -60,6 +60,14 @@ export function getSiteURL(): string {
     return getSiteURLFromWindowObject(window);
 }
 
+export function getServerURL(): string {
+    return 'http://68.183.237.166'
+}
+
+export function getAPIUrl(): string {
+    return getServerURL() + '/api/v4'
+}
+
 export function getRelativeChannelURL(teamName: string, channelName: string): string {
     return `/${teamName}/channels/${channelName}`;
 }

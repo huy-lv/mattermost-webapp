@@ -36,7 +36,9 @@
             {
                 "ignore": ["location", "history", "component"]
             }
-        ]
+        ],
+        "header/header": "off",
+        "semi": "off"
     },
     "overrides": [
         {

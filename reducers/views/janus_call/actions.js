@@ -90,3 +90,23 @@ export function saveJanusId(roomId, id) {
             .set(id);
     };
 }
+
+export function toggleTranscription(roomId, value) {
+    return (dispatch, getState) => {
+        const { currentUserId } = getState().entities.users
+        firebase
+            .database()
+            .ref(`/onFlight/rooms/${roomId}/users/${currentUserId}/transcription`)
+            .set(value);
+    };
+}
+
+export function toggleTranslation(roomId, value) {
+    return (dispatch, getState) => {
+        const { currentUserId } = getState().entities.users
+        firebase
+            .database()
+            .ref(`/onFlight/rooms/${roomId}/users/${currentUserId}/translation`)
+            .set(value);
+    };
+}

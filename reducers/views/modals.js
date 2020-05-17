@@ -25,7 +25,10 @@ function modalState(state = {}, action) {
                 dialogType: action.dialogType,
             },
         };
-
+    case ActionTypes.SHOW_HIDE_ALERT_DIALOG:
+        return { ...state, alert: { ...action } };
+    case ActionTypes.SHOW_HIDE_LOADING_DIALOG:
+        return { ...state, loading: { ...action } };
     default:
         return state;
     }

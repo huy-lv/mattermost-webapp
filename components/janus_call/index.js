@@ -2,24 +2,43 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import {
     joinRoom,
     saveJanusId,
+    toggleTranscription,
+    toggleTranslation
 } from '../../reducers/views/janus_call/actions';
+import {
+    showHideLoadingDialog,
+    showHideAlertDialog
+} from 'actions/views/modals';
 
 import JanusCall from './janus_call';
 
 function mapStateToProps(state) {
+    const { currentUserId, profiles } = state.entities.users
+    const { username } = profiles[currentUserId]
+    const { rooms, roomId } = state.views.janusCall
     return {
-        state
+        currentUserId,
+        username,
+        rooms,
+        roomId
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        joinRoom: (onCreateRoomDone) => dispatch(joinRoom(onCreateRoomDone)),
-        saveJanusId: (roomId, id) => dispatch(saveJanusId(roomId, id)),
+        actions: bindActionCreators({
+            showHideLoadingDialog,
+            showHideAlertDialog,
+            toggleTranscription,
+            toggleTranslation,
+            saveJanusId,
+            joinRoom
+        }, dispatch),
     };
 }
 

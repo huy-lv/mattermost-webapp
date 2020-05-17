@@ -7,6 +7,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {memoizeResult} from 'mattermost-redux/utils/helpers';
 
+import 'bootstrap';
 import { Typography, Grid } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,7 +23,6 @@ import Button from '@material-ui/core/Button';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import Switch from '@material-ui/core/Switch';
 
-import {Constants} from 'utils/constants.jsx';
 import {formatText} from 'utils/text_formatting';
 import messageHtmlToComponent from 'utils/message_html_to_component';
 import {browserHistory} from 'utils/browser_history';
@@ -32,6 +32,8 @@ import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 import LoadingScreen from 'components/loading_screen';
 import AnnouncementBar from 'components/announcement_bar';
 import * as GlobalActions from 'actions/global_actions.jsx';
+import Janus from 'janus/janus.js';
+import {Constants} from 'utils/constants';
 
 import * as strings from '../../utils/strings';
 import * as Utils from '../../utils/Util';
@@ -72,8 +74,6 @@ const messageList = [];
 let varIsInCall = false;
 const iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
 const eventName = iOS ? 'pagehide' : 'beforeunload';
-const formattedText = memoizeResult((text) => formatText(text, {}, props.emojiMap));
-import Janus from 'janus/janus.js';
 
 function CallScreen(props) {
     const [isInCall, setIsInCall] = useState(false);
@@ -90,21 +90,8 @@ function CallScreen(props) {
     const [loading, setLoading] = useState(true);
     const [serverError, setServerError] = useState(null);
 
-    const showHideAlertDialog = (visible, message) => {
-        if (visible) {
-            console.log('ALERT: ', message);
-        }
-    };
-
-    const showHideLoadingDialog = (visible) => {
-        console.log('LOADING: ', visible);
-    };
-
     useEffect(() => {
-        //componentdidmount
-        // const script = document.createElement('script');
-        // script.src = '/janus/janusdsds.js';
-        // document.head.appendChild(script);
+        // componentdidmount
         if (props.location.pathname) {
             const params = new URLSearchParams(props.location.search);
             const paramId = params.get('id');
@@ -132,7 +119,7 @@ function CallScreen(props) {
             callback() {
             // Make sure the browser supports WebRTC
                 if (!Janus.isWebrtcSupported()) {
-                    showHideAlertDialog(true, 'No WebRTC support... ');
+                    props.actions.showHideAlertDialog(true, 'No WebRTC support... ');
                     return;
                 }
 
@@ -171,7 +158,7 @@ function CallScreen(props) {
                             },
                             error(error) {
                                 Janus.error('  -- Error attaching plugin...', error);
-                                showHideAlertDialog(
+                                props.actions.showHideAlertDialog(
                                     true,
                                     'Error attaching plugin... ' + error
                                 );
@@ -182,10 +169,10 @@ function CallScreen(props) {
                                 );
                                 if (on) {
                                     // Darken screen and show hint
-                                    showHideLoadingDialog(true, 'loadingg');
+                                    props.actions.showHideLoadingDialog(true, 'loadingg');
                                 } else {
                                     // Restore screen
-                                    showHideLoadingDialog(false);
+                                    props.actions.showHideLoadingDialog(false);
                                 }
                             },
                             mediaState(medium, on) {
@@ -251,7 +238,7 @@ function CallScreen(props) {
                             ' with ID ' +
                             myid
                                         );
-                                        props.saveJanusId(roomId, myid);
+                                        props.actions.saveJanusId(roomId, myid);
                                         publishOwnFeed(true);
 
                                         // Any new feed to attach to?
@@ -284,7 +271,7 @@ function CallScreen(props) {
                                     } else if (event === 'destroyed') {
                                         // The room has been destroyed
                                         Janus.warn('The room has been destroyed!');
-                                        showHideAlertDialog(
+                                        props.actions.showHideAlertDialog(
                                             true,
                                             'The room has been destroyed',
                                             '',
@@ -399,13 +386,13 @@ function CallScreen(props) {
                                         ) {
                                             if (msg.error_code === 426) {
                                                 // This is a "no such room" error: give a more meaningful description
-                                                showHideAlertDialog(
+                                                props.actions.showHideAlertDialog(
                                                     true,
                                                     strings.room_not_available
                                                 );
                                                 props.history.goBack();
                                             } else {
-                                                showHideAlertDialog(true, msg.error);
+                                                props.actions.showHideAlertDialog(true, msg.error);
                                             }
                                         }
                                     }
@@ -547,7 +534,7 @@ function CallScreen(props) {
                     },
                     error(error) {
                         Janus.error(error);
-                        showHideAlertDialog(true, error, '', [
+                        props.actions.showHideAlertDialog(true, error, '', [
                             { text: strings.ok, onPress: () => window.location.reload() },
                         ]);
                     },
@@ -588,23 +575,18 @@ function CallScreen(props) {
     };
 
     const registerUsername = () => {
-        const username = 'huylv';
         const register = {
             request: 'join',
             room: roomId,
             ptype: 'publisher',
-            display: username,
+            display: props.username,
         };
-        myusername = username;
+        myusername = props.username;
         sfutest.send({ message: register });
     };
 
-    const handleAcceptTerms = () => {
-        // console.log("s", this.state, this.props.state.entities.users.currentUserId)
-    };
-
     const onSwitchTranscription = (event, checked) => {
-        props.toggleTranscription(roomId, checked);
+        props.actions.toggleTranscription(roomId, checked);
         setDisableTranscriptionSwitch(true);
         setTimeout(() => {
             setDisableTranscriptionSwitch(false);
@@ -612,7 +594,7 @@ function CallScreen(props) {
     };
 
     const onSwitchTranslation = (e, checked) => {
-        props.toggleTranslation(roomId, checked);
+        props.actions.toggleTranslation(roomId, checked);
         setDisableTranslationSwitch(true);
         setTimeout(() => {
             setDisableTranslationSwitch(false);
@@ -645,7 +627,7 @@ function CallScreen(props) {
                 if (useAudio) {
                     publishOwnFeed(false);
                 } else {
-                    showHideAlertDialog(
+                    props.actions.showHideAlertDialog(
                         true,
                         'WebRTC error... ' + JSON.stringify(error)
                     );
@@ -704,7 +686,7 @@ function CallScreen(props) {
             },
             error(error) {
                 Janus.error('  -- Error attaching plugin...', error);
-                showHideAlertDialog(true, 'Error attaching plugin... ' + error);
+                props.actions.showHideAlertDialog(true, 'Error attaching plugin... ' + error);
             },
             onmessage(msg, jsep) {
                 Janus.debug(' ::: Got a message (subscriber) :::');
@@ -712,7 +694,7 @@ function CallScreen(props) {
                 const event = msg.videoroom;
                 Janus.debug('Event: ' + event);
                 if (msg.error !== undefined && msg.error !== null) {
-                    showHideAlertDialog(true, msg.error);
+                    props.actions.showHideAlertDialog(true, msg.error);
                 } else if (event !== undefined && event !== null) {
                     //only attach user, do not attach audio listener
                     if (event === 'attached') {
@@ -797,7 +779,7 @@ function CallScreen(props) {
                         },
                         error(error) {
                             Janus.error('WebRTC error:', error);
-                            showHideAlertDialog(
+                            props.actions.showHideAlertDialog(
                                 true,
                                 'WebRTC error... ' + JSON.stringify(error)
                             );
@@ -1334,7 +1316,7 @@ function CallScreen(props) {
                     sfutest.send({ message: { audio: true, video: true }, jsep });
                 },
                 error(error) {
-                    showHideAlertDialog(
+                    props.actions.showHideAlertDialog(
                         true,
                         'WebRTC error... ' + JSON.stringify(error)
                     );
@@ -1351,7 +1333,7 @@ function CallScreen(props) {
                     sfutest.send({ message: { audio: true, video: true }, jsep });
                 },
                 error(error) {
-                    showHideAlertDialog(
+                    props.actions.showHideAlertDialog(
                         true,
                         'WebRTC error... ' + JSON.stringify(error)
                     );
@@ -1362,39 +1344,26 @@ function CallScreen(props) {
     };
 
     const onStartVideoCall = async () => {
-        showHideLoadingDialog(
+        props.actions.showHideLoadingDialog(
             true,
             'It may takes about 40 seconds for the first time!',
             'Initializing'
         );
 
         // Initialize the library (all console debuggers enabled)
-        props.joinRoom(joinRoomSuccessWithRoomId);
+        props.actions.joinRoom(joinRoomSuccessWithRoomId);
     };
 
-    const classes = useStyles();
-    const { uid, role } = props;
-    const transcriptionEnabled =
-        (props.room &&
-          props.room.users &&
-          props.room.users[uid] &&
-          props.room.users[uid].transcription) ||
-        false;
-
-    const translationEnabled =
-        (props.room &&
-          props.room.users &&
-          props.room.users[uid] &&
-          props.room.users[uid].translation) ||
-        false;
-
-    const usersInRoom = props.room && props.room.users;
-    let termsMarkdownClasses = 'terms-of-service__markdown';
-    if (serverError) {
-        termsMarkdownClasses += ' terms-of-service-error__height--fill';
-    } else {
-        termsMarkdownClasses += ' terms-of-service__height--fill';
+    const onClickTest = (e) => {
+        props.actions.props.actions.showHideLoadingDialog(true,'messsagee')
     }
+
+    const classes = useStyles();
+    const { currentUserId, role, rooms } = props;
+    const transcriptionEnabled = _.get(rooms, roomId + '.users.' + currentUserId + '.transcription') || false
+    const translationEnabled = _.get(rooms, roomId + '.users.' + currentUserId + '.translation') || false
+    const usersInRoom = _.get(rooms, roomId + '.users') || [];
+
     return (
         <Grid container={true} className={classes.root}>
             <InviteDialog
@@ -1419,16 +1388,16 @@ function CallScreen(props) {
                             className={classes.button}
                             onClick={() => setInviteDialogVisible(true)}
                         >
-                  Invite
+                        Invite
                         </Button>
                     ) : null}
-                    {/* <Button
-              color="primary"
-              className={classes.button}
-              onClick={onClickTest}
-            >
-              Test button
-            </Button> */}
+                    {/*<Button
+                        color="primary"
+                        className={classes.button}
+                        onClick={onClickTest}
+                    >
+                        Test button
+                    </Button>*/}
                     {isInCall ? (
                         <FormControlLabel
                             control={

@@ -30,7 +30,7 @@
                 "detectObjects": true
             }
         ],
-        "react/jsx-filename-extension": 0,
+        "react/jsx-filename-extension": "off",
         "react/prop-types": [
             2,
             {
@@ -38,7 +38,8 @@
             }
         ],
         "header/header": "off",
-        "semi": "off"
+        "semi": "off",
+        "react/jsx-boolean-value": "off"
     },
     "overrides": [
         {
@@ -87,12 +88,6 @@
                         "properties": "never"
                     }
                 ],
-                "react/jsx-filename-extension": [
-                    1,
-                    {
-                        "extensions": [".jsx", ".tsx"]
-                    }
-                ]
             }
         },
         {

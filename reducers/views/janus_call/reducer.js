@@ -5,7 +5,7 @@ const originalInitialState = {
   rooms: {},
 };
 
-function reduce(state = originalInitialState, action = null) {
+export default function janusCall(state = originalInitialState, action = null) {
   switch (action.type) {
     case types.ON_ROOM_CHANGED:
       return { ...state, rooms: { [action.roomId]: action.data } };
@@ -15,7 +15,3 @@ function reduce(state = originalInitialState, action = null) {
       return state;
   }
 }
-
-export default combineReducers({
-  reduce,
-});

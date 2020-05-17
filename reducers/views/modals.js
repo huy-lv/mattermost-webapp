@@ -27,6 +27,8 @@ function modalState(state = {}, action) {
         };
     case ActionTypes.SHOW_HIDE_ALERT_DIALOG:
         return { ...state, alert: { ...action } };
+    case ActionTypes.HIDE_ALERT_DIALOG:
+        return { ...state, alert: { ...state.alert, visible: false } };
     case ActionTypes.SHOW_HIDE_LOADING_DIALOG:
         return { ...state, loading: { ...action } };
     default:

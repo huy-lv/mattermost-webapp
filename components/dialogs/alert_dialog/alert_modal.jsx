@@ -13,15 +13,15 @@ export const Transition = React.forwardRef((props, ref) => (
 
 export default class AlertDialog extends React.Component {
   renderButtons = () => {
-    let { buttons } = this.props;
-    if (buttons) {
+    let { buttons, hideDialog } = this.props;
+    if (buttons.length > 0) {
       return (
         <DialogActions>
           {buttons.map((item, index) => {
             return (
               <Button
                 onClick={() => {
-                  this.props.hideDialog();
+                  hideDialog();
                   item.onPress && item.onPress();
                 }}
                 color="primary"
@@ -36,7 +36,7 @@ export default class AlertDialog extends React.Component {
     } else {
       return (
         <DialogActions>
-          <Button onClick={this.props.hideDialog} color="primary">
+          <Button onClick={hideDialog} color="primary">
             OK
           </Button>
         </DialogActions>
@@ -45,7 +45,7 @@ export default class AlertDialog extends React.Component {
   };
 
   render() {
-    let { title, message, visible } = this.props;
+    let { title, message, visible, hideDialog } = this.props;
 
     return (
       <Dialog
@@ -53,7 +53,7 @@ export default class AlertDialog extends React.Component {
         TransitionComponent={Transition}
         keepMounted
         maxWidth="sm"
-        onClose={this.props.hideDialog}
+        onClose={hideDialog}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >

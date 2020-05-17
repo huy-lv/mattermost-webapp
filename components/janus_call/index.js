@@ -8,7 +8,8 @@ import {
     joinRoom,
     saveJanusId,
     toggleTranscription,
-    toggleTranslation
+    toggleTranslation,
+    joinRoomById
 } from '../../reducers/views/janus_call/actions';
 import {
     showHideLoadingDialog,
@@ -37,7 +38,8 @@ function mapDispatchToProps(dispatch) {
             toggleTranscription,
             toggleTranslation,
             saveJanusId,
-            joinRoom
+            joinRoom,
+            joinRoomById
         }, dispatch),
     };
 }

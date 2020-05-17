@@ -15,9 +15,4 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoadingModal);
+export default connect(mapStateToProps)(LoadingModal);

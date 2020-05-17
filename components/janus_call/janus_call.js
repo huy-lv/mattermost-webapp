@@ -87,20 +87,13 @@ function CallScreen(props) {
     );
     const [timerRunning, setTimerRunning] = useState(false);
     const [inviteDialogVisible, setInviteDialogVisible] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [serverError, setServerError] = useState(null);
 
     useEffect(() => {
         // componentdidmount
         if (props.location.pathname) {
-            const params = new URLSearchParams(props.location.search);
-            const paramId = params.get('id');
-            const rid = parseInt(paramId);
-            if (rid) {
-                props.history.push();
-                props.joinRoomById(rid, joinRoomSuccessWithRoomId);
-            } else if (paramId !== '' && paramId !== null) {
-                props.history.goBack();
+            const paths = props.location.pathname.split('/')
+            if(paths.length > 2 && parseInt(paths[2])) {
+                props.actions.joinRoomById(parseInt(paths[2]), joinRoomSuccessWithRoomId);
             }
         }
 
@@ -108,11 +101,17 @@ function CallScreen(props) {
         window.addEventListener(eventName, requestLeaveRoom);
     }, []);
 
+    const closeWindow = () => {
+        window.close()
+    }
+
     const joinRoomSuccessWithRoomId = (newRoomId) => {
         if (newRoomId === null) {
-            props.history.push();
+            props.actions.showHideAlertDialog(true, strings.room_not_available, null,
+                [{text: 'OK', onPress: closeWindow}]);
             return;
         }
+        props.history.push('/call/' + newRoomId)
         roomId = newRoomId;
         Janus.init({
             debug: 'all',

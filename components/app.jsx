@@ -13,6 +13,7 @@ import firebaseConfig from 'config/firebase';
 
 import { makeAsyncComponent } from 'components/async_load';
 import LoadingModal from './dialogs/loading_modal';
+import AlertDialog from './dialogs/alert_dialog';
 const LazyRoot = React.lazy(() => import('components/root'));
 
 const Root = makeAsyncComponent(LazyRoot);
@@ -31,6 +32,7 @@ class App extends React.Component {
                         <Route path="/" component={Root} />
                     </Router>
                     <LoadingModal />
+                    <AlertDialog />
                 </div>
             </Provider>
         );

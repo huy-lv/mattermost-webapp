@@ -6,7 +6,7 @@ import { getAPIUrl } from 'utils/url';
 
 import * as types from './action-types';
 
-export const joinRoom = (onCreateRoomDone) => {
+export function joinRoom(onCreateRoomDone) {
     return async (dispatch, getState) => {
         const { currentUserId, profiles } = getState().entities.users
         const roomPath = '/onFlight/getRoomID/' + currentUserId;
@@ -39,6 +39,37 @@ export const joinRoom = (onCreateRoomDone) => {
             }
         });
     }
+}
+
+export function joinRoomById(roomId, onCreateRoomDone) {
+    return async (dispatch, getState) => {
+        const { currentUserId, profiles } = getState().entities.users
+        const { username } = profiles[currentUserId]
+        const role = (await firebase.database().ref('mm_users/' + currentUserId).once('value')).role || Constants.USER_ROLE.STUDENT
+        const photoURL = getAPIUrl() + '/users/' + currentUserId + '/image'
+
+        if (await isRoomAvailable(roomId)) {
+            await firebase
+            .database()
+            .ref('onFlight/getRoomID/' + currentUserId)
+            .set({
+                roomId,
+                status: 'ready',
+            });
+            await onJoinRoomSuccess(dispatch, roomId, currentUserId, username, role, photoURL);
+            onCreateRoomDone(roomId);
+        } else {
+            onCreateRoomDone(null);
+        }
+    };
+}
+
+async function isRoomAvailable(roomId) {
+  let roomSnapshot = await firebase
+    .database()
+    .ref('/onFlight/rooms/' + roomId)
+    .once('value');
+  return roomSnapshot.val() !== null;
 }
 
 async function onJoinRoomSuccess(

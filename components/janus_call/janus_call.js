@@ -3,11 +3,8 @@
 
 import PropTypes from 'prop-types';
 import React, {useState, useEffect} from 'react';
-import {FormattedMessage} from 'react-intl';
 
-import {memoizeResult} from 'mattermost-redux/utils/helpers';
 
-import 'bootstrap';
 import { Typography, Grid } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,17 +20,8 @@ import Button from '@material-ui/core/Button';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import Switch from '@material-ui/core/Switch';
 
-import {formatText} from 'utils/text_formatting';
-import messageHtmlToComponent from 'utils/message_html_to_component';
-import {browserHistory} from 'utils/browser_history';
-import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-import LogoutIcon from 'components/widgets/icons/fa_logout_icon';
-import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-import LoadingScreen from 'components/loading_screen';
-import AnnouncementBar from 'components/announcement_bar';
-import * as GlobalActions from 'actions/global_actions.jsx';
 import Janus from 'janus/janus.js';
-import {Constants} from 'utils/constants';
+import TranscriptionMessage from './transcription_message';
 
 import * as strings from '../../utils/strings';
 import * as Utils from '../../utils/Util';
@@ -188,10 +176,7 @@ function CallScreen(props) {
                         (on ? 'up' : 'down') +
                         ' now'
                                 );
-                                $('#videolocal')
-                                    .parent()
-                                    .parent()
-                                    .unblock();
+                                $('#videolocal').parent().parent().unblock && $('#videolocal').parent().parent().unblock();
                                 if (!on) {
                                     return;
                                 }
@@ -473,9 +458,8 @@ function CallScreen(props) {
                                     sfutest.webrtcStuff.pc.iceConnectionState !== 'completed' &&
                       sfutest.webrtcStuff.pc.iceConnectionState !== 'connected'
                                 ) {
-                                    $('#videolocal')
-                                        .parent()
-                                        .parent()
+                                    $('#videolocal').parent().parent().block &&
+                                    $('#videolocal').parent().parent()
                                         .block({
                                             message: '<b>Publishing...</b>',
                                             css: {
@@ -519,10 +503,7 @@ function CallScreen(props) {
                                 $('#publish').click(() => {
                                     publishOwnFeed(true);
                                 });
-                                $('#videolocal')
-                                    .parent()
-                                    .parent()
-                                    .unblock();
+                                $('#videolocal').parent().parent().unblock && $('#videolocal').parent().parent().unblock();
                                 $('#bitrate')
                                     .parent()
                                     .parent()
@@ -1461,12 +1442,12 @@ function CallScreen(props) {
                         <ScrollToBottom className={classes.listSubtitle}>
                             <List>
                                 {messageList.map((m, i) => (
-                                    <Message
+                                    <TranscriptionMessage
                                         key={i}
                                         message={m.trans}
                                         vi={m.vi}
                                         en={m.en}
-                                        mine={m.src === uid}
+                                        mine={m.src === currentUserId}
                                         last={messageList[i - 1]}
                                         next={messageList[i + 1]}
                                         final={m.final}
@@ -1474,14 +1455,14 @@ function CallScreen(props) {
                                         viTranslation={translationEnabled}
                                         photoURL={
                                             usersInRoom &&
-                          usersInRoom[m.src] &&
-                          usersInRoom[m.src].photoURL
+                                            usersInRoom[m.src] &&
+                                            usersInRoom[m.src].photoURL
                                         }
                                     />
                                 ))}
                             </List>
                         </ScrollToBottom>
-                        <div className={classes.textInputContainer}>
+                        {/* <div className={classes.textInputContainer}>
                             <TextField
                                 id="standard-textarea"
                                 label="Chat"
@@ -1506,7 +1487,7 @@ function CallScreen(props) {
                             >
                                 <Send />
                             </IconButton>
-                        </div>
+                                    </div> */}
                     </Card>
                 </Grid>
                 <Grid item={true} xs={5}>

@@ -27,13 +27,11 @@ class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <div>
-                    <Router history={browserHistory}>
-                        <Route path="/" component={Root} />
-                    </Router>
+                <Router history={browserHistory}>
+                    <Route path="/" component={Root} />
                     <LoadingModal />
                     <AlertDialog />
-                </div>
+                </Router>
             </Provider>
         );
     }

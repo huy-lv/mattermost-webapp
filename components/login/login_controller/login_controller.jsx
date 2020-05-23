@@ -525,7 +525,7 @@ class LoginController extends React.Component {
         const samlSigninEnabled = this.state.samlEnabled;
         const usernameSigninEnabled = true;//this.state.usernameSigninEnabled;
         const emailSigninEnabled = this.state.emailSigninEnabled;
-        const googleSignInEnabled = false;
+        const googleSignInEnabled = true;
 
         if (emailSigninEnabled || usernameSigninEnabled || ldapEnabled) {
             let errorClass = '';

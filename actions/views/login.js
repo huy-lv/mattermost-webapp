@@ -41,6 +41,8 @@ export function loginWithGoogle() {
                 photoURL: user.photoURL,
                 email: user.email,
             };
+            let idToken1 = await firebase.auth().currentUser.getIdToken();
+            console.log('idtoken: ' + idToken1)
             dispatch({ type: 'LOGIN_WITH_GOOGLE_SUCCESS', payload: { idToken, accessToken, userInfo } });
         } catch (error) {
             console.log('Error ', error);

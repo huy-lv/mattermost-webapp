@@ -4,6 +4,9 @@
 import * as UserActions from 'mattermost-redux/actions/users';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import Client4 from 'mattermost-redux/client/client4';
+import AsiaService from 'services/AsiaService';
+
 export function login(loginId, password, mfaToken) {
     return (dispatch) => {
         return ignoreMfaRequiredError(dispatch(UserActions.login(loginId, password, mfaToken)));
@@ -33,7 +36,7 @@ export function loginWithGoogle() {
 
         try {
             const result = await firebase.auth().signInWithPopup(googleProvider);
-            const { accessToken, idToken } = result.credential;
+            const { accessToken } = result.credential;
             const user = result.user;
             const userInfo = {
                 uid: user.uid,
@@ -41,9 +44,13 @@ export function loginWithGoogle() {
                 photoURL: user.photoURL,
                 email: user.email,
             };
-            let idToken1 = await firebase.auth().currentUser.getIdToken();
-            console.log('idtoken: ' + idToken1)
-            dispatch({ type: 'LOGIN_WITH_GOOGLE_SUCCESS', payload: { idToken, accessToken, userInfo } });
+            let idToken = await firebase.auth().currentUser.getIdToken();
+
+            let body = { idToken };
+            let response = await AsiaService.loginWithGoogle(idToken)
+
+            console.log('idtoken: ' + response)
+            // dispatch({ type: 'LOGIN_WITH_GOOGLE_SUCCESS', payload: { idToken, accessToken, userInfo } });
         } catch (error) {
             console.log('Error ', error);
         }

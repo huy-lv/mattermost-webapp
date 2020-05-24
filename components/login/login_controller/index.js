@@ -11,7 +11,7 @@ import {RequestStatus} from 'mattermost-redux/constants';
 
 import {addUserToTeamFromInvite} from 'actions/team_actions';
 
-import {login} from 'actions/views/login';
+import {login, loginWithGoogle} from 'actions/views/login';
 
 import LoginController from './login_controller.jsx';
 
@@ -80,6 +80,7 @@ function mapDispatchToProps(dispatch) {
         actions: bindActionCreators({
             login,
             addUserToTeamFromInvite,
+            loginWithGoogle
         }, dispatch),
     };
 }

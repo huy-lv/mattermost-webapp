@@ -270,66 +270,73 @@ class LoginController extends React.Component {
     submit = (loginId, password, token) => {
         this.setState({ serverError: null, loading: true });
 
-        this.props.actions.login(loginId, password, token).then(async ({ error }) => {
-            if (error) {
-                if (error.server_error_id === 'api.user.login.not_verified.app_error') {
-                    browserHistory.push('/should_verify_email?&email=' + encodeURIComponent(loginId));
-                } else if (
-                    error.server_error_id === 'store.sql_user.get_for_login.app_error' ||
-                    error.server_error_id === 'ent.ldap.do_login.user_not_registered.app_error'
-                ) {
-                    this.setState({
-                        showMfa: false,
-                        loading: false,
-                        serverError: (
-                            <FormattedMessage
-                                id="login.userNotFound"
-                                defaultMessage="We couldn't find an account matching your login credentials."
-                            />
-                        ),
-                    });
-                } else if (
-                    error.server_error_id === 'api.user.check_user_password.invalid.app_error' ||
-                    error.server_error_id === 'ent.ldap.do_login.invalid_password.app_error'
-                ) {
-                    this.setState({
-                        showMfa: false,
-                        loading: false,
-                        serverError: (
-                            <FormattedMessage id="login.invalidPassword" defaultMessage="Your password is incorrect." />
-                        ),
-                    });
-                } else if (!this.state.showMfa && error.server_error_id === 'mfa.validate_token.authenticate.app_error') {
-                    this.setState({ showMfa: true });
-                } else {
-                    this.setState({
-                        showMfa: false,
-                        serverError: error.message,
-                        loading: false,
-                    });
-                }
+        this.props.actions.login(loginId, password, token).then(this.onLoginFinish);
+    };
 
-                return;
+
+    onPressLoginWithGoogle = () => {
+        this.props.actions.loginWithGoogle().then(this.onLoginFinish);
+    }
+
+    onLoginFinish = async ({ error }) => {
+        if (error) {
+            if (error.server_error_id === 'api.user.login.not_verified.app_error') {
+                browserHistory.push('/should_verify_email?&email=' + encodeURIComponent(loginId));
+            } else if (
+                error.server_error_id === 'store.sql_user.get_for_login.app_error' ||
+                error.server_error_id === 'ent.ldap.do_login.user_not_registered.app_error'
+            ) {
+                this.setState({
+                    showMfa: false,
+                    loading: false,
+                    serverError: (
+                        <FormattedMessage
+                            id="login.userNotFound"
+                            defaultMessage="We couldn't find an account matching your login credentials."
+                        />
+                    ),
+                });
+            } else if (
+                error.server_error_id === 'api.user.check_user_password.invalid.app_error' ||
+                error.server_error_id === 'ent.ldap.do_login.invalid_password.app_error'
+            ) {
+                this.setState({
+                    showMfa: false,
+                    loading: false,
+                    serverError: (
+                        <FormattedMessage id="login.invalidPassword" defaultMessage="Your password is incorrect." />
+                    ),
+                });
+            } else if (!this.state.showMfa && error.server_error_id === 'mfa.validate_token.authenticate.app_error') {
+                this.setState({ showMfa: true });
+            } else {
+                this.setState({
+                    showMfa: false,
+                    serverError: error.message,
+                    loading: false,
+                });
             }
 
-            // check for query params brought over from signup_user_complete
-            const params = new URLSearchParams(this.props.location.search);
-            const inviteToken = params.get('t') || '';
-            const inviteId = params.get('id') || '';
+            return;
+        }
 
-            if (inviteId || inviteToken) {
-                const { data: team } = await this.props.actions.addUserToTeamFromInvite(inviteToken, inviteId);
-                if (team) {
-                    this.finishSignin(team);
-                } else {
-                    // there's not really a good way to deal with this, so just let the user log in like normal
-                    this.finishSignin();
-                }
+        // check for query params brought over from signup_user_complete
+        const params = new URLSearchParams(this.props.location.search);
+        const inviteToken = params.get('t') || '';
+        const inviteId = params.get('id') || '';
+
+        if (inviteId || inviteToken) {
+            const { data: team } = await this.props.actions.addUserToTeamFromInvite(inviteToken, inviteId);
+            if (team) {
+                this.finishSignin(team);
             } else {
+                // there's not really a good way to deal with this, so just let the user log in like normal
                 this.finishSignin();
             }
-        });
-    };
+        } else {
+            this.finishSignin();
+        }
+    }
 
     finishSignin = (team) => {
         const experimentalPrimaryTeam = this.props.experimentalPrimaryTeam;
@@ -663,7 +670,7 @@ class LoginController extends React.Component {
 
         if (googleSignInEnabled) {
             loginControls.push(
-                <div className="btn btn-custom-login google" key="google" onClick={loginWithGoogle()}>
+                <div className="btn btn-custom-login google" key="google" onClick={this.onPressLoginWithGoogle}>
                     <span>
                         <span className="icon" />
                         <span>

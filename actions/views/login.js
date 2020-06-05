@@ -36,19 +36,11 @@ export function loginWithGoogle() {
         googleProvider.addScope('profile');
 
         try {
-            const result = await firebase.auth().signInWithPopup(googleProvider);
+            await firebase.auth().signInWithPopup(googleProvider);
             let idToken = await firebase.auth().currentUser.getIdToken();
             let data = await AsiaService.loginWithGoogle(idToken)
-
-            console.log('idtoken: ' + JSON.stringify(data))
-            // dispatch({
-            //     type: UserTypes.RECEIVED_ME,
-            //     data,
-            // });
-            // Client1.Client4.setUserId(data.id);
-            // Client1.Client4.setUserRoles(data.roles);
-            return ignoreMfaRequiredError(dispatch(UserActions.completeLogin(data.data)))
-            // dispatch({ type: 'LOGIN_WITH_GOOGLE_SUCCESS', payload: { idToken, accessToken, userInfo } });
+            let { username, password } = data.data
+            return ignoreMfaRequiredError(dispatch(UserActions.login(username, password, '')));
         } catch (error) {
             console.log('Error ', error);
         }

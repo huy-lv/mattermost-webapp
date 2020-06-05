@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import { Client4 } from 'mattermost-redux/client';
 
 import * as GlobalActions from 'actions/global_actions.jsx';
-import { loginWithGoogle } from 'actions/views/login';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import { browserHistory } from 'utils/browser_history';
@@ -278,7 +277,10 @@ class LoginController extends React.Component {
         this.props.actions.loginWithGoogle().then(this.onLoginFinish);
     }
 
-    onLoginFinish = async ({ error }) => {
+    onLoginFinish = async (data) => {
+        this.props.actions.showHideLoadingDialog(false)
+        if(!data) return
+        let error = data.error
         if (error) {
             if (error.server_error_id === 'api.user.login.not_verified.app_error') {
                 browserHistory.push('/should_verify_email?&email=' + encodeURIComponent(loginId));

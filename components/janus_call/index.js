@@ -10,7 +10,7 @@ import {
     toggleTranscription,
     toggleTranslation,
     joinRoomById
-} from '../../reducers/views/janus_call/actions';
+} from '../../reducers/minus/janus_call/actions';
 import {
     showHideLoadingDialog,
     showHideAlertDialog

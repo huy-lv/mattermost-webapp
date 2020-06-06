@@ -21,7 +21,7 @@ import settings from './settings';
 import marketplace from './marketplace';
 import channelSidebar from './channel_sidebar';
 import textbox from './textbox';
-import janusCall from './janus_call/reducer'
+import janusCall from '../minus/janus_call/reducer'
 
 export default combineReducers({
     admin,

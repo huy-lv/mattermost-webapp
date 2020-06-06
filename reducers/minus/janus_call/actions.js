@@ -8,12 +8,10 @@ import * as types from './action-types';
 
 export function joinRoom(onCreateRoomDone) {
     return async (dispatch, getState) => {
-        const { currentUserId, profiles } = getState().entities.users
-        const roomPath = '/onFlight/getRoomID/' + currentUserId;
+        const { firebaseId, profile, role } = getState().minus.firebaseDatabase
+        const roomPath = '/onFlight/getRoomID/' + firebaseId;
         const roomId = moment().valueOf();
-        const { username } = profiles[currentUserId]
-        const role = (await firebase.database().ref('mm_users/' + currentUserId).once('value')).role || Constants.USER_ROLE.STUDENT
-        const photoURL = getAPIUrl() + '/users/' + currentUserId + '/image'
+        const { username, photoURL } = profile
 
         //find room id by user id
         await firebase
@@ -29,7 +27,7 @@ export function joinRoom(onCreateRoomDone) {
                 await onJoinRoomSuccess(
                     dispatch,
                     roomId,
-                    currentUserId,
+                    firebaseId,
                     username,
                     role,
                     photoURL
@@ -43,20 +41,18 @@ export function joinRoom(onCreateRoomDone) {
 
 export function joinRoomById(roomId, onCreateRoomDone) {
     return async (dispatch, getState) => {
-        const { currentUserId, profiles } = getState().entities.users
-        const { username } = profiles[currentUserId]
-        const role = (await firebase.database().ref('mm_users/' + currentUserId).once('value')).role || Constants.USER_ROLE.STUDENT
-        const photoURL = getAPIUrl() + '/users/' + currentUserId + '/image'
+        const { firebaseId, profile, role } = getState().minus.firebaseDatabase
+        const { username, photoURL } = profile
 
         if (await isRoomAvailable(roomId)) {
             await firebase
             .database()
-            .ref('onFlight/getRoomID/' + currentUserId)
+            .ref('onFlight/getRoomID/' + firebaseId)
             .set({
                 roomId,
                 status: 'ready',
             });
-            await onJoinRoomSuccess(dispatch, roomId, currentUserId, username, role, photoURL);
+            await onJoinRoomSuccess(dispatch, roomId, firebaseId, username, role, photoURL);
             onCreateRoomDone(roomId);
         } else {
             onCreateRoomDone(null);
@@ -114,30 +110,30 @@ async function onJoinRoomSuccess(
 
 export function saveJanusId(roomId, id) {
     return (dispatch, getState) => {
-        const { currentUserId } = getState().entities.users
+        const { firebaseId } = getState().minus.firebaseDatabase
         firebase
             .database()
-            .ref(`/onFlight/rooms/${roomId}/users/${currentUserId}/janusId`)
+            .ref(`/onFlight/rooms/${roomId}/users/${firebaseId}/janusId`)
             .set(id);
     };
 }
 
 export function toggleTranscription(roomId, value) {
     return (dispatch, getState) => {
-        const { currentUserId } = getState().entities.users
+        const { firebaseId } = getState().minus.firebaseDatabase
         firebase
             .database()
-            .ref(`/onFlight/rooms/${roomId}/users/${currentUserId}/transcription`)
+            .ref(`/onFlight/rooms/${roomId}/users/${firebaseId}/transcription`)
             .set(value);
     };
 }
 
 export function toggleTranslation(roomId, value) {
     return (dispatch, getState) => {
-        const { currentUserId } = getState().entities.users
+        const { firebaseId } = getState().minus.firebaseDatabase
         firebase
             .database()
-            .ref(`/onFlight/rooms/${roomId}/users/${currentUserId}/translation`)
+            .ref(`/onFlight/rooms/${roomId}/users/${firebaseId}/translation`)
             .set(value);
     };
 }

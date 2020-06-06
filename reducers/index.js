@@ -4,9 +4,11 @@
 import plugins from './plugins';
 import views from './views';
 import storage from './storage';
+import minus from './minus'
 
 export default {
     views,
     plugins,
     storage,
+    minus
 };

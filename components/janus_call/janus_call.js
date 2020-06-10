@@ -87,6 +87,7 @@ function CallScreen(props) {
 
         // beforeunload event
         window.addEventListener(eventName, requestLeaveRoom);
+        window.addEventListener('unload', onPageUnload)
     }, []);
 
     const closeWindow = () => {
@@ -527,32 +528,15 @@ function CallScreen(props) {
     };
 
     const requestLeaveRoom = (event) => {
-        // if (varIsInCall) {
         if (event && varIsInCall) {
             event.preventDefault();
             event.returnValue = '';
         }
-
-        // } else {
-        //   for (var s in Janus.sessions) {
-        //     if (
-        //       Janus.sessions[s] !== null &&
-        //       Janus.sessions[s] !== undefined &&
-        //       Janus.sessions[s].destroyOnUnload
-        //     ) {
-        //       Janus.log('Destroying session ' + s);
-        //       Janus.sessions[s].destroy({
-        //         asyncRequest: false,
-        //         notifyDestroyed: false,
-        //       });
-        //     }
-        //   }
-        //   if (oldOBF && typeof oldOBF == 'function') oldOBF();
-        //   props.history.push();
-        //   leaveRoom(roomId, uid);
-        //   janus && janus.destroy();
-        // }
     };
+
+    const onPageUnload = () => {
+        leaveRoom(roomId, currentUserId);
+    }
 
     const registerUsername = () => {
         const register = {

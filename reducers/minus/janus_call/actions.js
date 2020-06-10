@@ -137,3 +137,16 @@ export function toggleTranslation(roomId, value) {
             .set(value);
     };
 }
+
+export async function leaveRoom(roomId, uid) {
+    let roomPath = `onFlight/getRoomID/${uid}`;
+    //set to path
+    await firebase
+        .database()
+        .ref(roomPath)
+        .remove();
+    await firebase
+        .database()
+        .ref(`onFlight/rooms/${roomId}/users/${uid}`)
+        .remove();
+}

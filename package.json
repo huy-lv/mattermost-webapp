@@ -11,6 +11,7 @@
     "@types/highlight.js": "9.12.3",
     "@types/redux-mock-store": "1.0.1",
     "@typescript-eslint/parser": "2.7.0",
+    "axios": "0.19.2",
     "bootstrap": "3.4.1",
     "bootstrap-colorpicker": "2.5.2",
     "chart.js": "2.8.0",
@@ -36,9 +37,11 @@
     "key-mirror": "1.0.1",
     "localforage": "1.7.3",
     "localforage-observable": "2.0.0",
+    "lodash": "^4.17.15",
     "mark.js": "8.11.1",
     "marked": "github:mattermost/marked#5a06d1af25ca48927b9efe0d9c42c01c84e7839b",
-    "mattermost-redux": "github:mattermost/mattermost-redux#9a915443ab1d695540493406926c3dd269d380fc",
+    "mattermost-redux": "github:huy-lv/mattermost-redux#c65da20ad82f1357338f13426c18f3936b0eb9fb",
+    "moment": "^2.25.3",
     "moment-timezone": "0.5.27",
     "pdfjs-dist": "2.0.489",
     "popmotion": "8.7.0",
@@ -59,6 +62,7 @@
     "react-overlays": "1.2.0",
     "react-redux": "5.1.1",
     "react-router-dom": "5.0.1",
+    "react-scroll-to-bottom": "^2.0.0",
     "react-select": "2.4.4",
     "react-transition-group": "4.3.0",
     "react-virtualized-auto-sizer": "1.0.2",
@@ -70,6 +74,7 @@
     "regenerator-runtime": "0.13.3",
     "reselect": "4.0.0",
     "semver": "6.3.0",
+    "styled-components": "^5.1.0",
     "superagent": "5.1.0",
     "typescript": "3.7.4",
     "xregexp": "4.2.4",
@@ -165,7 +170,10 @@
     "webpack-livereload-plugin": "2.2.0",
     "webpack-node-externals": "1.7.2",
     "webpack-pwa-manifest": "4.1.1",
-    "yup": "0.27.0"
+    "yup": "0.27.0",
+    "@material-ui/core": "4.9.3",
+    "@material-ui/icons": "4.0.1",
+    "@material-ui/lab": "4.0.0-alpha.43"
   },
   "jest": {
     "snapshotSerializers": [

@@ -4,6 +4,9 @@
 import * as UserActions from 'mattermost-redux/actions/users';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import AsiaService from 'services/AsiaService';
+import { showHideLoadingDialog } from './modals';
+
 export function login(loginId, password, mfaToken) {
     return (dispatch) => {
         return ignoreMfaRequiredError(dispatch(UserActions.login(loginId, password, mfaToken)));
@@ -32,17 +35,14 @@ export function loginWithGoogle() {
         googleProvider.addScope('profile');
 
         try {
-            const result = await firebase.auth().signInWithPopup(googleProvider);
-            const { accessToken, idToken } = result.credential;
-            const user = result.user;
-            const userInfo = {
-                uid: user.uid,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-                email: user.email,
-            };
-            dispatch({ type: 'LOGIN_WITH_GOOGLE_SUCCESS', payload: { idToken, accessToken, userInfo } });
+            await firebase.auth().signInWithPopup(googleProvider);
+            dispatch(showHideLoadingDialog(true))
+            let idToken = await firebase.auth().currentUser.getIdToken();
+            let data = await AsiaService.loginWithGoogle(idToken)
+            let { username, password } = data.data
+            return ignoreMfaRequiredError(dispatch(UserActions.login(username, password, '')));
         } catch (error) {
+            dispatch(showHideLoadingDialog(false))
             console.log('Error ', error);
         }
     };

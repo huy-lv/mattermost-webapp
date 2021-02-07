@@ -44,9 +44,10 @@ const LazySelectTeam = React.lazy(() => import('components/select_team'));
 const LazyAuthorize = React.lazy(() => import('components/authorize'));
 const LazyCreateTeam = React.lazy(() => import('components/create_team'));
 const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
+const LazyJanusCall = React.lazy(() => import('components/janus_call'));
 
 import store from 'stores/redux_store.jsx';
-import { getSiteURL } from 'utils/url';
+import { getSiteURL, getServerURL } from 'utils/url';
 import { enableDevModeFeatures, isDevMode } from 'utils/utils';
 
 import A11yController from 'utils/a11y_controller';
@@ -69,6 +70,7 @@ const LinkingLandingPage = makeAsyncComponent(LazyLinkingLandingPage);
 const SelectTeam = makeAsyncComponent(LazySelectTeam);
 const Authorize = makeAsyncComponent(LazyAuthorize);
 const Mfa = makeAsyncComponent(LazyMfa);
+const JanusCall = makeAsyncComponent(LazyJanusCall);
 
 const LoggedInRoute = ({ component: Component, ...rest }) => (
     <Route
@@ -98,7 +100,8 @@ export default class Root extends React.Component {
         this.currentSidebarFocus = 0;
 
         // Redux
-        setUrl(getSiteURL());
+        // setUrl(getSiteURL());
+        setUrl(getServerURL());
 
         setSystemEmojis(EmojiIndicesByAlias);
 
@@ -294,6 +297,7 @@ export default class Root extends React.Component {
                 const e = document.createElement('script');
                 e.type = 'text/javascript';
                 e.async = true;
+
                 // e.src =
                 //     (document.location.protocol === 'https:' ? 'https://' : 'http://') +
                 //     'cdn.rudderla bs.com/rudder-analytics.min.js';
@@ -415,6 +419,7 @@ export default class Root extends React.Component {
                     <HFTRoute path={'/do_verify_email'} component={DoVerifyEmail} />
                     <HFTRoute path={'/claim'} component={ClaimController} />
                     <HFTRoute path={'/help'} component={HelpController} />
+                    <LoggedInRoute path={'/call'} component={JanusCall}/>
                     <LoggedInRoute path={'/terms_of_service'} component={TermsOfService} />
                     <Route path={'/landing'} component={LinkingLandingPage} />
                     <LoggedInRoute path={'/admin_console'} component={AdminConsole} />

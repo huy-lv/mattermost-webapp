@@ -34,6 +34,14 @@ function navigationBlock(state = initialState, action) {
             onNavigationConfirmed: null,
             showNavigationPrompt: false,
         };
+    case ActionTypes.SHOW_HIDE_ALERT_DIALOG:
+        return { ...state, alert: { ...action } };
+    case ActionTypes.HIDE_ALERT_DIALOG:
+        return { ...state, alert: { ...state.alert, visible: false } };
+    case ActionTypes.SHOW_HIDE_LOADING_DIALOG:
+        return { ...state, loading: { ...action } };
+    case ActionTypes.SERVER_STATUS_CHANGED:
+        return { ...state, serverStatus: action.data };
     default:
         return state;
     }

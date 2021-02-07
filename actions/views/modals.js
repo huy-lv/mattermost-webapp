@@ -28,3 +28,26 @@ export function closeModal(modalId) {
         return {data: true};
     };
 }
+
+export function showHideAlertDialog(visible, message, title, buttons) {
+    return (dispatch) => {
+        dispatch({
+            type: ActionTypes.SHOW_HIDE_ALERT_DIALOG,
+            visible,
+            title: title || 'Alert',
+            message,
+            buttons,
+        })
+    }
+}
+
+export function showHideLoadingDialog(visible, message, title) {
+    return (dispatch) => {
+        dispatch({
+            type: ActionTypes.SHOW_HIDE_LOADING_DIALOG,
+            visible,
+            message,
+            title,
+        })
+    }
+}

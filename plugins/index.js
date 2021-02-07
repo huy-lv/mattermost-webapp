@@ -7,7 +7,7 @@ import {Client4} from 'mattermost-redux/client';
 
 import store from 'stores/redux_store.jsx';
 import {ActionTypes} from 'utils/constants.jsx';
-import {getSiteURL} from 'utils/url';
+import {getSiteURL, getServerURL} from 'utils/url';
 import PluginRegistry from 'plugins/registry';
 import {unregisterAllPluginWebSocketEvents, unregisterPluginReconnectHandler} from 'actions/websocket_actions.jsx';
 import {unregisterPluginTranslationsSource} from 'actions/views/root';
@@ -109,7 +109,8 @@ export function loadPlugin(manifest) {
         const script = document.createElement('script');
         script.id = 'plugin_' + manifest.id;
         script.type = 'text/javascript';
-        script.src = getSiteURL() + bundlePath;
+        // script.src = getSiteURL() + bundlePath;
+        script.src = getServerURL() + bundlePath;
         script.onload = onLoad;
         script.onerror = onError;
 

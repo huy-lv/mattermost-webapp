@@ -12,6 +12,8 @@ import store from 'stores/redux_store.jsx';
 import firebaseConfig from 'config/firebase';
 
 import { makeAsyncComponent } from 'components/async_load';
+import LoadingModal from './dialogs/loading_modal';
+import AlertDialog from './dialogs/alert_dialog';
 const LazyRoot = React.lazy(() => import('components/root'));
 
 const Root = makeAsyncComponent(LazyRoot);
@@ -27,6 +29,8 @@ class App extends React.Component {
             <Provider store={store}>
                 <Router history={browserHistory}>
                     <Route path="/" component={Root} />
+                    <LoadingModal />
+                    <AlertDialog />
                 </Router>
             </Provider>
         );

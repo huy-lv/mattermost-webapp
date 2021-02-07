@@ -3,6 +3,7 @@
 
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
 import * as UserActions from 'mattermost-redux/actions/users';
+import * as UserFirebaseActions from '../../reducers/minus/firebase/actions'
 import {Client4} from 'mattermost-redux/client';
 
 import {ActionTypes} from 'utils/constants';
@@ -17,10 +18,11 @@ export function loadMeAndConfig() {
             dispatch(getLicenseConfig()),
         ];
 
-        // need to await for clientConfig first as it is required for loadMe
+        // need to await for clientConfig first as it is required f`or loadMe
         const resolvedPromises = await Promise.all(promises);
-        if (document.cookie.indexOf('MMUSERID=') > -1) {
+        if (document.cookie.indexOf('MMUSERID=') > -1 || true) {
             resolvedPromises.push(await dispatch(UserActions.loadMe()));
+            resolvedPromises.push(await dispatch(UserFirebaseActions.loadMeFirebase()));
         }
 
         return resolvedPromises;

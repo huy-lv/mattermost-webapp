@@ -153,6 +153,8 @@ export const ActionTypes = keyMirror({
 
     MODAL_OPEN: null,
     MODAL_CLOSE: null,
+    SHOW_HIDE_ALERT_DIALOG: null,
+    SHOW_HIDE_LOADING_DIALOG: null,
 
     SELECT_CHANNEL_WITH_MEMBER: null,
     UPDATE_CHANNEL_LAST_VIEWED_AT: null,
@@ -201,6 +203,11 @@ export const ActionTypes = keyMirror({
     UPDATE_TOAST_STATUS: null,
     TRACK_ANNOUNCEMENT_BAR: null,
     DISMISS_ANNOUNCEMENT_BAR: null,
+
+    SHOW_HIDE_ALERT_DIALOG: null,
+    HIDE_ALERT_DIALOG: null,
+    SHOW_HIDE_LOADING_DIALOG: null,
+    SERVER_STATUS_CHANGED: null
 });
 
 export const PostRequestTypes = keyMirror({
@@ -766,7 +773,16 @@ export const Constants = {
     Locations,
     PostListRowListIds,
     MAX_POST_VISIBILITY: 1000000,
-
+    USER_ROLE: {
+        TEACHER: 'teacher',
+        STUDENT: 'student',
+      },
+      DF: 'DD/MM/YYYY HH:mm:ss',
+      SERVER_STATUS: {
+        RUNNING: 'running',
+        STOPPED: 'stopped',
+        STARTING: 'starting',
+      },
     IGNORE_POST_TYPES: [PostTypes.JOIN_LEAVE, PostTypes.JOIN_TEAM, PostTypes.LEAVE_TEAM, PostTypes.JOIN_CHANNEL, PostTypes.LEAVE_CHANNEL, PostTypes.REMOVE_FROM_CHANNEL, PostTypes.ADD_REMOVE],
 
     PayloadSources: keyMirror({
